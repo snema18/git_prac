@@ -6,7 +6,7 @@ public class file2{
     int c=a+b;
                        System.out.println("sum"+a);
 			System.out.println("sum"+c);
-                        System.out.println("sum"+c);
+                    
 		
 	}
 }
