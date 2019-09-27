@@ -1,31 +1,20 @@
 pipeline {
-    agent any
-    parameters {
-        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-
-        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-
-        file(name: "FILE", description: "Choose a file to upload")
-    }
+    agent any 
     stages {
-        stage('Example') {
+        stage('Build') { 
             steps {
-                echo "Hello ${params.PERSON}"
-
-                echo "Biography: ${params.BIOGRAPHY}"
-
-                echo "Toggle: ${params.TOGGLE}"
-
-                echo "Choice: ${params.CHOICE}"
-
-                echo "Password: ${params.PASSWORD}"
+               git url: 'https://github.com/snema18/Pipeline.git'
             }
         }
+        
+        
+        stage('Mave package') { 
+            steps {
+                sh '/opt/maven/bin/mvn clean package'
+            }
+         stage('Deploy the war file to tomcat container'){
+            steps{
+                deploy adapters: [tomcat9(credentialsId: '9814b801-6ff0-483c-975b-6e771a3e3be4', path: '', url: 'http://18.223.171.12:8090/')], contextPath: 'Hello-world-warr', war: '**/*.war'
+            }
     }
 }
